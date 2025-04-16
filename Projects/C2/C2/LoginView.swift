@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct LoginView: View {
     
@@ -20,6 +21,8 @@ struct LoginView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 30) {
+                
+            //로고
                 Rectangle()
                     .foregroundColor(.clear)
                     .frame(width: 132.94714, height: 155)
@@ -31,14 +34,12 @@ struct LoginView: View {
                             .clipped()
                     )
                 
+                
+            //닉네임 입력
                 TextField("닉네임 (영문)", text: $userId)
                     .padding(.vertical, 15) // 텍스트 필드 안 상하 여백
                     .background(Color(red: 0.71, green: 0.94, blue: 0.99).opacity(0.2)) // 배경
                     .cornerRadius(10) // 둥근 테두리
-                //  .overlay(
-                //      RoundedRectangle(cornerRadius: 10)
-                //  .stroke(Color.green, lineWidth: 1) // 테두리 색상 및 두께
-                //  )
                     .padding(.top, 30) // 상 여백
                     .font(
                         Font.custom("SUIT Variable", size: 20)
@@ -47,11 +48,14 @@ struct LoginView: View {
                     .multilineTextAlignment(.center)
                 
                 
+            //러너 멘토 선택
                 HStack(spacing: 0) {
                     RoleButton(title: "러너", tag: "러너", selectedRole: $selectedRole)
                     RoleButton(title: "멘토", tag: "멘토", selectedRole: $selectedRole)
                 }
                 
+                
+            //분야 선택
                 Menu {
                     Picker("분야", selection: $selectedField) {
                         Text("탐색 중").tag("탐색 중")
@@ -80,7 +84,8 @@ struct LoginView: View {
                     .cornerRadius(10)
                 }
                     
-                
+            
+            //로그인 버튼
                 Button(action: {
                     // 로그인 로직 예시
                     isLoggedIn = true
@@ -128,25 +133,10 @@ struct LoginView: View {
                 Image(imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
+                    .frame(width: 129.5, height: 48)
             }
             .buttonStyle(PlainButtonStyle()) // 기본 버튼 스타일 제거
-            .animation(.easeInOut(duration: 0.2), value: isSelected)
-        }
-    }
-
-    
-    // 특정 모서리만 둥글게 처리할 수 있게 도와주는 Shape
-    struct RoundedCorners: Shape {
-        var radius: CGFloat = .infinity
-        var corners: UIRectCorner = .allCorners
-
-        func path(in rect: CGRect) -> Path {
-            let path = UIBezierPath(
-                roundedRect: rect,
-                byRoundingCorners: corners,
-                cornerRadii: CGSize(width: radius, height: radius)
-            )
-            return Path(path.cgPath)
+            .animation(.easeInOut(duration: 0.5), value: isSelected)
         }
     }
 }

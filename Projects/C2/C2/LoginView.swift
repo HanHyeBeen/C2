@@ -8,11 +8,36 @@
 import SwiftUI
 
 struct LoginView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    @Binding var isLoggedIn: Bool
+    @State private var userId: String = ""
 
-#Preview {
-    LoginView()
+    var body: some View {
+        ZStack {
+            Image("BGcolor")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                
+                
+                Text("로그인 페이지")
+                    .font(.largeTitle)
+                    .bold()
+                
+                Button(action: {
+                    // 로그인 로직 예시
+                    isLoggedIn = true
+                }) {
+                    Text("로그인")
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .padding(.horizontal)
+            }
+        }
+    }
 }

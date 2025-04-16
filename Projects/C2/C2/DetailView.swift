@@ -8,11 +8,24 @@
 import SwiftUI
 
 struct DetailView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    let itemTitle: String
 
-#Preview {
-    DetailView()
+    var body: some View {
+        ZStack {
+            
+            Image("BGcolor")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+            
+            VStack {
+                Text("상세 페이지")
+                    .font(.title)
+                
+                Text("선택한 항목: \(itemTitle)")
+                    .padding()
+            }
+            .navigationTitle("상세 정보")
+        }
+    }
 }

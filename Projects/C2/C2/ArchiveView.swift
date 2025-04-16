@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct ArchiveView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    let archiveItems = ["아이템 1", "아이템 2", "아이템 3"]
 
-#Preview {
-    ArchiveView()
+    var body: some View {
+        List(archiveItems, id: \.self) { item in
+            NavigationLink(destination: DetailView(itemTitle: item)) {
+                Text(item)
+            }
+        }
+        .navigationTitle("보관함")
+    }
 }

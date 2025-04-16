@@ -12,10 +12,7 @@ struct MainView: View {
 
     var body: some View {
         ZStack {
-            
-            Image("BGcolor")
-                .resizable()
-                .scaledToFill()
+            C2App.BGColor
                 .ignoresSafeArea()
             
             VStack(spacing: 20) {

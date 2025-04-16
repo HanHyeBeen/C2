@@ -11,7 +11,9 @@ import SwiftData
 struct MainView: View {
     @Binding var isLoggedIn: Bool
 
+    @Environment(\.modelContext) private var modelContext
     
+
     @Query private var mentors: [Mentor]
     @Query private var questions: [Question]
     
@@ -46,15 +48,30 @@ struct MainView: View {
                     Text("📘 \(mentor.field)")
                         .font(.subheadline)
                         .foregroundColor(.gray)
+                    
+                    if !mentor.assignedQuestions.isEmpty {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("🗂 받은 질문 목록:")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                            ForEach(mentor.assignedQuestions, id: \.id) { q in
+                                Text("- \(q.question.content)")
+                                    .font(.footnote)
+                                    .foregroundColor(.black)
+                            }
+
+                        }
+                        .padding(.top, 10)
+                    }
                 }
                 
                 if let question = selectedQuestion {
-                    Text("❓ \(question.content)")
-                        .font(.headline)
-                        .foregroundColor(.black)
-                        .padding(.top)
-                }
-                
+                                    Text("❓ \(question.content)")
+                                        .font(.headline)
+                                        .foregroundColor(.black)
+                                        .padding(.top)
+                                }
+
                 
                 NavigationLink("보관함으로 이동") {
                     ArchiveView()
@@ -66,12 +83,30 @@ struct MainView: View {
         
                 
                 Button("뽑기") {
-                    if let mentor = mentors.randomElement() {
+                    guard let mentor = mentors.randomElement() else { return }
+
+                    let assignedQuestionIds = Set(mentor.assignedQuestions.compactMap { $0.question.id })
+                    let unassignedQuestions = questions.filter { !assignedQuestionIds.contains($0.id) }
+
+                    guard let question = unassignedQuestions.randomElement() else {
                         selectedMentor = mentor
+                        selectedQuestion = nil
+                        print("⚠️ 이 멘토는 더 이상 받을 질문이 없습니다.")
+                        return
                     }
-                    if let question = questions.randomElement() {
-                        selectedQuestion = question
+
+                    let newAssigned = AssignedQuestion(question: question, mentor: mentor)
+                    modelContext.insert(newAssigned)
+
+                    do {
+                        try modelContext.save()
+                        print("✅ 질문 '\(question.content)'이 멘토 '\(mentor.name)'에게 할당됨")
+                    } catch {
+                        print("❌ 저장 실패: \(error)")
                     }
+
+                    selectedMentor = mentor
+                    selectedQuestion = question
                 }
                 .font(.title2)
                 

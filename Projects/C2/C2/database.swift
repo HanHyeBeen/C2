@@ -8,13 +8,14 @@
 import Foundation
 import SwiftData
 
-// 멘토 정보
+// MARK: - 멘토 정보
 @Model
 class Mentor {
     @Attribute(.unique) var id: UUID
     var name: String
     var field: String
-    var isSelected: Bool      // <- 랜덤 배정 여부
+    var isSelected: Bool
+
     @Relationship(deleteRule: .cascade) var assignedQuestions: [AssignedQuestion]
 
     init(name: String, field: String, isSelected: Bool = false) {
@@ -26,34 +27,33 @@ class Mentor {
     }
 }
 
-
-// 질문 정보
+// MARK: - 질문 정보
 @Model
 class Question {
     @Attribute(.unique) var id: UUID
     var content: String
 
-    init(content: String) {
-        self.id = UUID()
+    init(id: UUID = UUID(), content: String) {
+        self.id = id
         self.content = content
     }
 }
 
-// 멘토에게 할당된 질문
+// MARK: - 멘토에게 할당된 질문
 @Model
 class AssignedQuestion {
     @Attribute(.unique) var id: UUID
-    var content: String         // 실제 질문 내용 복사본
     var dateAssigned: Date
     var memo: String?
     var dateMemoAdded: Date?
-    
-    @Relationship var mentor: Mentor
 
-    init(content: String, dateAssigned: Date = Date(), mentor: Mentor) {
+    @Relationship var mentor: Mentor
+    @Relationship var question: Question  // ✅ 정석 연결
+
+    init(question: Question, mentor: Mentor, dateAssigned: Date = Date()) {
         self.id = UUID()
-        self.content = content
         self.dateAssigned = dateAssigned
         self.mentor = mentor
+        self.question = question
     }
 }

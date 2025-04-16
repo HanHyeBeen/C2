@@ -41,9 +41,9 @@ struct ContentView: View {
             ]
             
             let questions = [
-                Question(content: "MBTI는?"),
-                Question(content: "좋아하는 색은?"),
-                Question(content: "좋아하는 음식은?")
+                Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!, content: "MBTI는?"),
+                Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!, content: "좋아하는 색은?"),
+                Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000003")!, content: "좋아하는 음식은?")
             ]
             
             for mentor in mentors {

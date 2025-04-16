@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 import SwiftData
 
 @main
@@ -24,7 +25,8 @@ struct C2App: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+                ContentView()
+            }
+        .modelContainer(for: [Mentor.self, Question.self, AssignedQuestion.self]) // SwiftData 모델 컨테이너를 앱에 등록 하는 코드
         }
-    }
 }

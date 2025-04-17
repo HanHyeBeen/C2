@@ -13,13 +13,15 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     
     @State private var isLoggedIn = false
+    @State private var selectedRole: String = "" // 또는 초기값을 ""로 두고 LoginView에서 설정
+
 
     var body: some View {
         NavigationStack {
             if isLoggedIn {
-                MainView(isLoggedIn: $isLoggedIn)
+                MainView(isLoggedIn: $isLoggedIn, role: selectedRole)
             } else {
-                LoginView(isLoggedIn: $isLoggedIn)
+                LoginView(isLoggedIn: $isLoggedIn, selectedRole: $selectedRole)
             }
         }
         .task {
@@ -30,14 +32,24 @@ struct ContentView: View {
     func addInitialDataIfNeeded() async {
         do {
             let mentorCount = try modelContext.fetchCount(FetchDescriptor<Mentor>())
+            let learnerCount = try modelContext.fetchCount(FetchDescriptor<Learner>())
             let questionCount = try modelContext.fetchCount(FetchDescriptor<Question>())
             
-            guard mentorCount == 0, questionCount == 0 else { return }
+            guard mentorCount == 0, learnerCount == 0, questionCount == 0 else { return }
             
             let mentors = [
                 Mentor(name: "Leeo", field: "Tech"),
                 Mentor(name: "Friday", field: "Design"),
                 Mentor(name: "MK", field: "Education")
+            ]
+            
+            let learners = [
+                Learner(name: "Jeje", field: "Domain"),
+                Learner(name: "Romak", field: "Domain"),
+                Learner(name: "Excellenty", field: "Domain"),
+                Learner(name: "Sally", field: "Design"),
+                Learner(name: "My", field: "Tech"),
+                Learner(name: "Anne", field: "Tech")
             ]
             
             let questions = [
@@ -56,6 +68,10 @@ struct ContentView: View {
                 modelContext.insert(mentor)
             }
             
+            for learner in learners {
+                modelContext.insert(learner)
+            }
+
             for question in questions {
                 modelContext.insert(question)
             }

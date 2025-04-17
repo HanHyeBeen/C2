@@ -11,8 +11,10 @@ import SwiftData
 struct LoginView: View {
     
     @Binding var isLoggedIn: Bool
+    @Binding var selectedRole: String  // 기존의 State가 아닌 Binding으로 바꿔야 합니다
+    
     @State private var userId: String = ""
-    @State private var selectedRole: String = ""
+//    @State private var selectedRole: String = ""
     @State private var selectedField: String = ""
 
     var body: some View {

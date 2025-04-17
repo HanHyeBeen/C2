@@ -27,6 +27,25 @@ class Mentor {
     }
 }
 
+// MARK: - 러너 정보
+@Model
+class Learner {
+    @Attribute(.unique) var id: UUID
+    var name: String
+    var field: String
+    var isSelected: Bool
+
+    @Relationship(deleteRule: .cascade) var assignedQuestions: [AssignedQuestion]
+
+    init(name: String, field: String, isSelected: Bool = false) {
+        self.id = UUID()
+        self.name = name
+        self.field = field
+        self.isSelected = isSelected
+        self.assignedQuestions = []
+    }
+}
+
 // MARK: - 질문 정보
 @Model
 class Question {
@@ -48,12 +67,14 @@ class AssignedQuestion {
     var dateMemoAdded: Date?
 
     @Relationship var mentor: Mentor
+    @Relationship var learner: Learner
     @Relationship var question: Question  // ✅ 정석 연결
 
-    init(question: Question, mentor: Mentor, dateAssigned: Date = Date()) {
+    init(question: Question, mentor: Mentor, learner: Learner, dateAssigned: Date = Date()) {
         self.id = UUID()
         self.dateAssigned = dateAssigned
         self.mentor = mentor
+        self.learner = learner
         self.question = question
     }
 }

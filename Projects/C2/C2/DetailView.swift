@@ -16,6 +16,9 @@ struct DetailView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var editingMemoID: UUID?
     @State private var memoText: String = ""
+    
+    @State private var showingDeleteAlertID: UUID?
+
 
     var body: some View {
         ZStack {
@@ -47,12 +50,24 @@ struct DetailView: View {
                                     }
                                     
                                     Button {
-                                        aq.memo = nil
-                                        aq.dateMemoAdded = nil
-                                        try? modelContext.save()
+                                        showingDeleteAlertID = aq.id  // 🔥 여기서 삭제를 하지 말고, alert에서 처리
                                     } label: {
                                         Image(systemName: "trash")
                                             .foregroundColor(.red)
+                                    }
+                                    .alert("메모를 삭제하시겠습니까?", isPresented: Binding(
+                                        get: { showingDeleteAlertID == aq.id },
+                                        set: { if !$0 { showingDeleteAlertID = nil } }
+                                    )) {
+                                        Button("삭제", role: .destructive) {
+                                            aq.memo = nil
+                                            aq.dateMemoAdded = nil
+                                            try? modelContext.save()
+                                            showingDeleteAlertID = nil
+                                        }
+                                        Button("취소", role: .cancel) {
+                                            showingDeleteAlertID = nil
+                                        }
                                     }
                                     
                                 } else {

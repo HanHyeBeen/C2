@@ -48,45 +48,30 @@ struct MainView: View {
                     Text("📘 \(mentor.field)")
                         .font(.subheadline)
                         .foregroundColor(.gray)
-                    
-                    if !mentor.assignedQuestions.isEmpty {
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("🗂 받은 질문 목록:")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                            ForEach(mentor.assignedQuestions, id: \.id) { q in
-                                Text("- \(q.question.content)")
-                                    .font(.footnote)
-                                    .foregroundColor(.black)
-                            }
-
-                        }
-                        .padding(.top, 10)
-                    }
                 }
                 
                 if let question = selectedQuestion {
-                                    Text("❓ \(question.content)")
-                                        .font(.headline)
-                                        .foregroundColor(.black)
-                                        .padding(.top)
-                                }
+                    Text("❓ \(question.content)")
+                        .font(.headline)
+                        .foregroundColor(.black)
+                        .padding(.top)
+                }
 
                 
                 NavigationLink("보관함으로 이동") {
                     ArchiveView()
-                }
-                
-                NavigationLink("상세 페이지로 이동") {
-                    DetailView(itemTitle: "예시 아이템")
                 }
         
                 
                 Button("뽑기") {
                     guard let mentor = mentors.randomElement() else { return }
 
-                    let assignedQuestionIds = Set(mentor.assignedQuestions.compactMap { $0.question.id })
-                    let unassignedQuestions = questions.filter { !assignedQuestionIds.contains($0.id) }
+                    let assignedQuestionIds = Set(
+                        mentor.assignedQuestions.map { $0.question.id }
+                    )
+                    let unassignedQuestions = questions.filter {
+                        !assignedQuestionIds.contains($0.id)
+                    }
 
                     guard let question = unassignedQuestions.randomElement() else {
                         selectedMentor = mentor
@@ -108,6 +93,7 @@ struct MainView: View {
                     selectedMentor = mentor
                     selectedQuestion = question
                 }
+
                 .font(.title2)
                 
                 

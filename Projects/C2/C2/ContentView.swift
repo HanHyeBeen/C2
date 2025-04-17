@@ -43,7 +43,13 @@ struct ContentView: View {
             let questions = [
                 Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!, content: "MBTI는?"),
                 Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!, content: "좋아하는 색은?"),
-                Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000003")!, content: "좋아하는 음식은?")
+                Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000003")!, content: "좋아하는 음식은?"),
+                Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000004")!, content: "좋아하는 계절은?"),
+                Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000005")!, content: "요즘 많이 듣는 음악은?"),
+                Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000006")!, content: "최근에 다녀온 여행지는?"),
+                Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000007")!, content: "스트레스 받을 때 힐링하는 방법은?"),
+                Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000008")!, content: "가보고 싶은 국내/해외 여행지는?"),
+                Question(id: UUID(uuidString: "00000000-0000-0000-0000-000000000009")!, content: "좋아하는 영화는?")
             ]
             
             for mentor in mentors {

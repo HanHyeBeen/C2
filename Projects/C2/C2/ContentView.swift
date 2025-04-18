@@ -13,6 +13,7 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     
     @State private var isLoggedIn = false
+    @State private var UserNickName: String = ""
     @State private var selectedRole: String = "" // 또는 초기값을 ""로 두고 LoginView에서 설정
     
     @State private var currentMentor: Mentor? = nil
@@ -24,12 +25,13 @@ struct ContentView: View {
             if isLoggedIn {
                 MainView(
                     isLoggedIn: $isLoggedIn,
+                    userID: UserNickName,
                     role: selectedRole,
                     currentMentor: $currentMentor,
                     currentLearner: $currentLearner
                 )
             } else {
-                LoginView(isLoggedIn: $isLoggedIn, selectedRole: $selectedRole)
+                LoginView(isLoggedIn: $isLoggedIn, selectedRole: $selectedRole, userId: $UserNickName)
             }
         }
         .task {

@@ -13,8 +13,7 @@ struct LoginView: View {
     @Binding var isLoggedIn: Bool
     @Binding var selectedRole: String  // 기존의 State가 아닌 Binding으로 바꿔야 합니다
     
-    @State private var userId: String = ""
-//    @State private var selectedRole: String = ""
+    @Binding var userId: String
     @State private var selectedField: String = ""
 
     var body: some View {
@@ -44,10 +43,11 @@ struct LoginView: View {
                     .cornerRadius(10) // 둥근 테두리
                     .padding(.top, 30) // 상 여백
                     .font(
-                        Font.custom("SUIT Variable", size: 20)
+                        Font.custom("SUIT-Variable", size: 20)
                             .weight(.heavy)
                     ) // 폰트 스타일
                     .multilineTextAlignment(.center)
+                    .keyboardType(.alphabet)
                 
                 
             //러너 멘토 선택
@@ -69,7 +69,7 @@ struct LoginView: View {
                     ZStack {
                         // 가운데 정렬 텍스트
                         Text(selectedField.isEmpty ? "분야" : selectedField)
-                            .font(Font.custom("SUIT Variable", size: 20).weight(.heavy))
+                            .font(Font.custom("SUIT-Variable", size: 20).weight(.heavy))
                             .foregroundColor(selectedField.isEmpty ? C2App.TextSub : C2App.TextPrimary)
                             .multilineTextAlignment(.center)
                         
@@ -89,20 +89,20 @@ struct LoginView: View {
             
             //로그인 버튼
                 Button(action: {
-                    // 로그인 로직 예시
                     isLoggedIn = true
                 }) {
                     Text("로그인")
                         .padding()
                         .font(
-                          Font.custom("SUIT Variable", size: 20)
-                            .weight(.heavy)
-                        ) // 폰트 스타일
+                            Font.custom("SUIT-Variable", size: 20).weight(.black)
+                        )
                         .frame(maxWidth: .infinity)
-                        .background(C2App.MainColor)
+                        .background(isLoginEnabled ? C2App.MainColor : Color.gray.opacity(0.3)) // 조건 만족 여부에 따라 배경색 변경
                         .foregroundColor(C2App.TextPrimary)
                         .cornerRadius(10)
                 }
+                .disabled(!isLoginEnabled)  // 조건이 충족되지 않으면 버튼 비활성화
+
             }
             .padding(.horizontal, 70)
         }
@@ -141,4 +141,11 @@ struct LoginView: View {
             .animation(.easeInOut(duration: 0.5), value: isSelected)
         }
     }
+    
+    var isLoginEnabled: Bool {
+        !userId.trimmingCharacters(in: .whitespaces).isEmpty &&
+        !selectedRole.isEmpty &&
+        !selectedField.isEmpty
+    }
+
 }

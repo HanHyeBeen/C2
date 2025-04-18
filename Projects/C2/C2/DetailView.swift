@@ -9,7 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct DetailView: View {
-    let mentor: Mentor
+    let mentor: Mentor?
+    let learner: Learner?
     let questions: [AssignedQuestion]
     let itemTitle: String
 
@@ -28,18 +29,28 @@ struct DetailView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
 
-                    Text("받은 질문 목록:")
-                        .font(.headline)
+                    // 제목 텍스트
+                    if let mentor = mentor {
+                        Text("멘토 \(mentor.name)가 받은 질문 목록:")
+                            .font(.headline)
+                    } else if let learner = learner {
+                        Text("러너 \(learner.name)가 받은 질문 목록:")
+                            .font(.headline)
+                    } else {
+                        Text("질문 목록:")
+                            .font(.headline)
+                    }
 
+                    // 질문 목록
                     ForEach(questions, id: \.id) { aq in
                         VStack(alignment: .leading, spacing: 5) {
                             HStack {
                                 Text("\(aq.question.content)")
                                     .font(.body)
-                                
+
                                 Spacer()
-                                
-                                // 메모가 있는 경우: 수정/삭제 버튼
+
+                                // 메모가 있는 경우: 수정/삭제
                                 if aq.memo != nil {
                                     Button {
                                         editingMemoID = aq.id
@@ -48,9 +59,9 @@ struct DetailView: View {
                                         Image(systemName: "pencil")
                                             .foregroundColor(.orange)
                                     }
-                                    
+
                                     Button {
-                                        showingDeleteAlertID = aq.id  // 🔥 여기서 삭제를 하지 말고, alert에서 처리
+                                        showingDeleteAlertID = aq.id
                                     } label: {
                                         Image(systemName: "trash")
                                             .foregroundColor(.red)
@@ -69,9 +80,9 @@ struct DetailView: View {
                                             showingDeleteAlertID = nil
                                         }
                                     }
-                                    
+
                                 } else {
-                                    // 메모가 없으면 + 버튼
+                                    // 메모가 없는 경우: 추가 버튼
                                     Button {
                                         if editingMemoID == aq.id {
                                             editingMemoID = nil
@@ -84,20 +95,6 @@ struct DetailView: View {
                                             .foregroundColor(.blue)
                                     }
                                 }
-                            
-//                                Button {
-//                                    if editingMemoID == aq.id {
-//                                        // 취소
-//                                        editingMemoID = nil
-//                                    } else {
-//                                        // 해당 질문에 대해 편집 시작
-//                                        editingMemoID = aq.id
-//                                        memoText = aq.memo ?? ""
-//                                    }
-//                                } label: {
-//                                    Image(systemName: editingMemoID == aq.id ? "xmark.circle.fill" : "plus.circle")
-//                                        .foregroundColor(.blue)
-//                                }
                             }
 
                             // 메모 입력창
@@ -129,11 +126,12 @@ struct DetailView: View {
                         .cornerRadius(8)
                         .shadow(radius: 1)
                     }
+
                     Spacer()
                 }
                 .padding()
             }
-            .navigationTitle("\(itemTitle)")
+            .navigationTitle(itemTitle)
         }
     }
 }

@@ -14,12 +14,20 @@ struct ContentView: View {
     
     @State private var isLoggedIn = false
     @State private var selectedRole: String = "" // 또는 초기값을 ""로 두고 LoginView에서 설정
+    
+    @State private var currentMentor: Mentor? = nil
+    @State private var currentLearner: Learner? = nil
 
 
     var body: some View {
         NavigationStack {
             if isLoggedIn {
-                MainView(isLoggedIn: $isLoggedIn, role: selectedRole)
+                MainView(
+                    isLoggedIn: $isLoggedIn,
+                    role: selectedRole,
+                    currentMentor: $currentMentor,
+                    currentLearner: $currentLearner
+                )
             } else {
                 LoginView(isLoggedIn: $isLoggedIn, selectedRole: $selectedRole)
             }

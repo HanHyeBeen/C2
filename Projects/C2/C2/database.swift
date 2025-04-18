@@ -66,11 +66,11 @@ class AssignedQuestion {
     var memo: String?
     var dateMemoAdded: Date?
 
-    @Relationship var mentor: Mentor
-    @Relationship var learner: Learner
+    @Relationship var mentor: Mentor?
+    @Relationship var learner: Learner?
     @Relationship var question: Question  // ✅ 정석 연결
 
-    init(question: Question, mentor: Mentor, learner: Learner, dateAssigned: Date = Date()) {
+    init(question: Question, mentor: Mentor?, learner: Learner?, dateAssigned: Date = Date()) {
         self.id = UUID()
         self.dateAssigned = dateAssigned
         self.mentor = mentor

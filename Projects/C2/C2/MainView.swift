@@ -305,12 +305,10 @@ struct MainView: View {
                     Text(popupField)
                         .foregroundColor(.gray)
                     
-                    
                     Image("random_Frame_left")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                    //                        .frame(width: 119, height: 44)
-                        .clipped()
+                        .frame(width: 276.7096862792969, height: 37.45851516723633)
                     
                     Text(popupQuestion)
                         .font(.body)
@@ -322,8 +320,7 @@ struct MainView: View {
                     Image("random_Frame_right")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                    //                        .frame(width: 119, height: 44)
-                        .clipped()
+                        .frame(width: 119, height: 44)
                     
                     Button(action: {
                         showingResultPopup = false
@@ -337,14 +334,12 @@ struct MainView: View {
                             .cornerRadius(12)
                     }
                 }
-                .padding()
+                .frame(width: 332, height: 669)
                 .background(
-                    RoundedRectangle(cornerRadius: 24)
-                        .fill(Color.white)
-                        .shadow(radius: 10)
+                    Image("RandomCard")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                 )
-                .padding(.horizontal, 30)
-                .padding(.vertical, 100)
                 .overlay(
                     // ✅ 알 뽑기 이미지 (하단)
                     Image("")

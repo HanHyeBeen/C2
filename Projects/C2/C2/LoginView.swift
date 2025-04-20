@@ -23,18 +23,18 @@ struct LoginView: View {
             
             VStack(spacing: 30) {
                 
-            //로고
-                Rectangle()
-                    .foregroundColor(.clear)
-                    .frame(width: 132.94714, height: 155)
-                    .background(
-                        Image("Logo")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 132.9471435546875)
-                            .clipped()
-                    )
-                
+            //로고 (개발자 모드 _ 빠른 로그인 기능)
+                Button(action: {
+                    userId = "Enoch"
+                    selectedRole = "러너"
+                    selectedField = "테크"
+                }) {
+                    Image("Logo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 132.9471435546875)
+                        .clipped()
+                }
                 
             //닉네임 입력
                 TextField("닉네임 (영문)", text: $userId)

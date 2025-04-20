@@ -308,7 +308,8 @@ struct MainView: View {
                     Image("random_Frame_left")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 276.7096862792969, height: 37.45851516723633)
+                        .frame(width: 269, height: 36)
+                        .padding(.leading, 28)
                     
                     Text(popupQuestion)
                         .font(.body)
@@ -316,30 +317,39 @@ struct MainView: View {
                         .padding(.horizontal)
                         .frame(maxWidth: 250)
                     
-                    
                     Image("random_Frame_right")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 119, height: 44)
+                        .frame(width: 269, height: 36)
+                        .padding(.trailing, 28)
                     
                     Button(action: {
                         showingResultPopup = false
                     }) {
-                        Text("확 인")
-                            .font(.headline)
-                            .foregroundColor(.black)
-                            .padding(.horizontal, 30)
-                            .padding(.vertical, 10)
-                            .background(Color.yellow)
-                            .cornerRadius(12)
+                        ZStack {
+                            Image("RandomBtn")
+                                .resizable()
+                                .frame(width: 135, height: 44)
+                            
+                            Text("확 인")
+                                .font(
+                                    Font.custom("SUIT-Variable", size: 20)
+                                        .weight(.heavy)
+                                )
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(C2App.Sub1)
+                                .padding(.horizontal, 62)
+                        }
                     }
                 }
-                .frame(width: 332, height: 669)
+                .frame(width: 400, height: 700)
                 .background(
                     Image("RandomCard")
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
+                        .aspectRatio(contentMode: .fill)
+//                        .frame(width: 332, height: 669)
                 )
+                .padding(.top, 80)
                 .overlay(
                     // ✅ 알 뽑기 이미지 (하단)
                     Image("")
@@ -364,8 +374,22 @@ struct MainView: View {
                         .foregroundColor(.black)
                         .padding(.horizontal)
                     
-                    Button("확 인") {
-                        showingAlertPopup = false
+                    Button(action: {
+                        showingResultPopup = false
+                    }) {
+                        ZStack {
+                            Image("RandomBtn")
+                                .resizable()
+                                .frame(width: 135, height: 44)
+                            
+                            Text("확 인")
+                                .font(
+                                    Font.custom("SUIT-Variable", size: 20)
+                                        .weight(.heavy)
+                                )
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(C2App.Sub1)
+                        }
                     }
                     .font(.headline)
                     .foregroundColor(.black)

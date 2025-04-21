@@ -37,18 +37,19 @@ struct LoginView: View {
                 }
                 
             //닉네임 입력
-                TextField("닉네임 (영문)", text: $userId)
-                    .padding(.vertical, 15) // 텍스트 필드 안 상하 여백
-                    .background(Color(red: 0.71, green: 0.94, blue: 0.99).opacity(0.2)) // 배경
-                    .cornerRadius(10) // 둥근 테두리
-                    .padding(.top, 30) // 상 여백
-                    .font(
-                        Font.custom("SUIT-Variable", size: 20)
-                            .weight(.heavy)
-                    ) // 폰트 스타일
-                    .multilineTextAlignment(.center)
-                    .keyboardType(.alphabet)
-                
+                ZStack {
+                    
+                    Image("Login_box")
+                        .resizable()
+                        .frame(width: 259, height: 48)
+                    
+                    TextField("닉네임 (영문)", text: $userId)
+                        .cornerRadius(10) // 둥근 테두리
+                        .font(Font.custom("SUIT-ExtraBold", size: 20))
+                        .multilineTextAlignment(.center)
+                        .keyboardType(.alphabet)
+                }
+                .padding(.top, 30) // 상 여백
                 
             //러너 멘토 선택
                 HStack(spacing: 0) {
@@ -66,24 +67,29 @@ struct LoginView: View {
                         Text("테크").tag("테크")
                     }
                 } label: {
-                    ZStack {
-                        // 가운데 정렬 텍스트
-                        Text(selectedField.isEmpty ? "분야" : selectedField)
-                            .font(Font.custom("SUIT-Variable", size: 20).weight(.heavy))
-                            .foregroundColor(selectedField.isEmpty ? C2App.TextSub : C2App.TextPrimary)
-                            .multilineTextAlignment(.center)
+                    ZStack{
+                        Image("Login_box")
+                            .resizable()
+                            .frame(width: 259, height: 48)
                         
-                        // 오른쪽 아이콘
-                        HStack {
-                            Spacer()
-                            Image(systemName: "chevron.down")
-                                .foregroundColor(C2App.TextSub)
+                        ZStack {
+                            // 가운데 정렬 텍스트
+                            Text(selectedField.isEmpty ? "분야" : selectedField)
+                                .font(Font.custom("SUIT-ExtraBold", size: 20))
+                                .foregroundColor(selectedField.isEmpty ? C2App.TextSub : C2App.TextPrimary)
+                                .multilineTextAlignment(.center)
+                            
+                            // 오른쪽 아이콘
+                            HStack {
+                                Spacer()
+                                Image(systemName: "chevron.down")
+                                    .foregroundColor(C2App.TextSub)
+                            }
                         }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .cornerRadius(10)
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(C2App.MainColor.opacity(0.2))
-                    .cornerRadius(10)
                 }
                     
             
@@ -91,15 +97,18 @@ struct LoginView: View {
                 Button(action: {
                     isLoggedIn = true
                 }) {
-                    Text("로그인")
-                        .padding()
-                        .font(
-                            Font.custom("SUIT-Variable", size: 20).weight(.black)
-                        )
-                        .frame(maxWidth: .infinity)
-                        .background(isLoginEnabled ? C2App.MainColor : Color.gray.opacity(0.3)) // 조건 만족 여부에 따라 배경색 변경
-                        .foregroundColor(C2App.TextPrimary)
-                        .cornerRadius(10)
+                    ZStack {
+                        Image("Login_btn")
+                            .resizable()
+                            .frame(width: 259, height: 48)
+                        
+                        Text("로그인")
+                            .padding()
+                            .font(Font.custom("SUIT-ExtraBold", size: 20))
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(C2App.TextPrimary)
+                            .cornerRadius(10)
+                    }
                 }
                 .disabled(!isLoginEnabled)  // 조건이 충족되지 않으면 버튼 비활성화
 

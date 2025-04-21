@@ -271,13 +271,11 @@ struct MainView: View {
                         
                         Text("뽑   기")
                             .font(
-                                Font.custom("SUIT-Variable", size: 20)
-                                    .weight(.heavy)
+                                Font.custom("SUIT-ExtraBold", size: 20)
                             )
                             .multilineTextAlignment(.center)
                             .foregroundColor(C2App.Sub1)
                     }
-                    
                 }
                 .font(.title2)
                 //                .disabled(!canDraw) // ✅ 비활성화 조건 적용
@@ -299,29 +297,37 @@ struct MainView: View {
             if showingResultPopup {
                 Color.black.opacity(0.3).ignoresSafeArea()
                 
-                VStack(spacing: 50) {
-                    Text(popupName)
-                        .font(.title).bold()
-                    Text(popupField)
-                        .foregroundColor(.gray)
+                VStack(spacing: 10) {
+                    VStack {
+                        Text(popupName)
+                            .font(Font.custom("SUIT-ExtraBold", size: 24))
+                        Text(popupField)
+                            .font(Font.custom("SUIT-ExtraBold", size: 20))
+                            .foregroundColor(C2App.TextSub)
+                        Spacer()
+                    }
+                    .frame(height: 100)
                     
-                    Image("random_Frame_left")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 269, height: 36)
-                        .padding(.leading, 28)
-                    
-                    Text(popupQuestion)
-                        .font(.body)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                        .frame(maxWidth: 250)
-                    
-                    Image("random_Frame_right")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 269, height: 36)
-                        .padding(.trailing, 28)
+                    VStack {
+                        Image("random_Frame_left")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 269, height: 36)
+                            .padding(.leading, 28)
+                        
+                        Text(popupQuestion)
+                            .font(Font.custom("SUIT-ExtraBold", size: 24))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                            .frame(maxWidth: 250)
+                        
+                        Image("random_Frame_right")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 269, height: 36)
+                            .padding(.trailing, 28)
+                    }
+                    .frame(width: 269, height: 300)
                     
                     Button(action: {
                         showingResultPopup = false
@@ -333,8 +339,7 @@ struct MainView: View {
                             
                             Text("확 인")
                                 .font(
-                                    Font.custom("SUIT-Variable", size: 20)
-                                        .weight(.heavy)
+                                    Font.custom("SUIT-ExtraBold", size: 20)
                                 )
                                 .multilineTextAlignment(.center)
                                 .foregroundColor(C2App.Sub1)
@@ -384,18 +389,16 @@ struct MainView: View {
                             
                             Text("확 인")
                                 .font(
-                                    Font.custom("SUIT-Variable", size: 20)
-                                        .weight(.heavy)
+                                    Font.custom("SUIT-ExtraBold", size: 20)
                                 )
                                 .multilineTextAlignment(.center)
                                 .foregroundColor(C2App.Sub1)
                         }
                     }
-                    .font(.headline)
+                    .font(Font.custom("SUIT-Bold", size: 20))
                     .foregroundColor(.black)
                     .padding(.horizontal, 30)
                     .padding(.vertical, 10)
-                    .background(Color.yellow)
                     .cornerRadius(12)
                 }
                 .padding()

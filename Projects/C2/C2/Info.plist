@@ -7,7 +7,8 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>UhBee Se_hyun Bold.ttf</string>
-		<string>SUIT-Variable.ttf</string>
+		<string>SUIT-ExtraBold.ttf</string>
+		<string>SUIT-Bold.ttf</string>
 	</array>
 </dict>
 </plist>

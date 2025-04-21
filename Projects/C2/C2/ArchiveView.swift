@@ -11,6 +11,12 @@ import SwiftData
 struct ArchiveView: View {
     let role: String
     
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     @Query private var assignedQuestions: [AssignedQuestion]
     
     // 멘토 기준 그룹핑 (러너일 때 사용)
@@ -33,16 +39,16 @@ struct ArchiveView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
-                if role == "멘토", learnerDict.isEmpty {
-                    Text("아직 질문을 받은 러너가 없습니다.")
-                        .foregroundColor(.gray)
-                        .padding()
-                } else if role == "러너", mentorDict.isEmpty {
-                    Text("아직 질문을 받은 멘토가 없습니다.")
-                        .foregroundColor(.gray)
-                        .padding()
-                } else {
+            if role == "멘토", learnerDict.isEmpty {
+                Text("아직 질문을 받은 러너가 없습니다.")
+                    .foregroundColor(.gray)
+                    .padding()
+            } else if role == "러너", mentorDict.isEmpty {
+                Text("아직 질문을 받은 멘토가 없습니다.")
+                    .foregroundColor(.gray)
+                    .padding()
+            } else {
+                LazyVGrid(columns: columns, spacing: 20) {
                     if role == "멘토" {
                         ForEach(Array(learnerDict.keys), id: \.id) { learner in
                             learnerCard(for: learner)
@@ -53,32 +59,43 @@ struct ArchiveView: View {
                         }
                     }
                 }
+                .padding()
             }
-            .padding()
         }
         .navigationTitle("보관함")
     }
     
-    // 🔹 뷰 조각을 따로 메서드로 분리
     // 멘토 카드
     @ViewBuilder
     private func mentorCard(for mentor: Mentor) -> some View {
         NavigationLink {
-            DetailView(mentor: mentor, learner: nil, questions: mentorDict[mentor] ?? [], itemTitle: mentor.name)
+            DetailView(mentor: mentor, learner: nil, questions: mentorDict[mentor] ?? [], itemTitle: mentor.name, itemSub: mentor.field)
         } label: {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("🎯 멘토: \(mentor.name)")
-                    .font(.title3)
-                    .foregroundColor(.black)
-                
-                Text("📘 분야: \(mentor.field)")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
+            ZStack {
+                Group {
+                    if mentor.field == "Tech" {
+                        Image("Tech")
+                            .resizable()
+                    } else if mentor.field == "Design" {
+                        Image("Design")
+                            .resizable()
+                    } else if mentor.field == "Domain" {
+                        Image("Domain")
+                            .resizable()
+                    } else {
+                        Image("Etc")
+                            .resizable()
+                    }
+                }
+                .frame(width: 100, height: 100)
+                .cornerRadius(8)
+
+                Text(mentor.name)
+                    .font(Font.custom("UhBee Se_hyun Bold", size: 14))
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(C2App.TextPrimary)
+                    .padding(.bottom, 20)
             }
-            .padding()
-            .background(Color.white)
-            .cornerRadius(12)
-            .shadow(radius: 2)
         }
         .buttonStyle(PlainButtonStyle())
     }
@@ -87,21 +104,36 @@ struct ArchiveView: View {
     @ViewBuilder
     private func learnerCard(for learner: Learner) -> some View {
         NavigationLink {
-            DetailView(mentor: nil, learner: learner, questions: learnerDict[learner] ?? [], itemTitle: learner.name)
+            DetailView(mentor: nil, learner: learner, questions: learnerDict[learner] ?? [], itemTitle: learner.name, itemSub: learner.field)
         } label: {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("🎯 러너: \(learner.name)")
-                    .font(.title3)
-                    .foregroundColor(.black)
-                
-                Text("📘 분야: \(learner.field)")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
+            ZStack {
+                Group {
+                    if learner.field == "Tech" {
+                        Image("Tech")
+                            .resizable()
+                    } else if learner.field == "Design" {
+                        Image("Design")
+                            .resizable()
+                    } else if learner.field == "Domain" {
+                        Image("Domain")
+                            .resizable()
+                    } else {
+                        Image("Etc")
+                            .resizable()
+                    }
+                }
+                .frame(width: 100, height: 100)
+                .cornerRadius(8)
+
+                Text(learner.name)
+                    .font(Font.custom("UhBee Se_hyun Bold", size: 14))
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(C2App.TextPrimary)
+                    .padding(.bottom, 20)
             }
-            .padding()
-            .background(Color.white)
-            .cornerRadius(12)
-            .shadow(radius: 2)
         }
+        .buttonStyle(PlainButtonStyle())
     }
+
+
 }

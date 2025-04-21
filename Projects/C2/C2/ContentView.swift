@@ -50,7 +50,21 @@ struct ContentView: View {
             let mentors = [
                 Mentor(name: "Leeo", field: "Tech"),
                 Mentor(name: "Friday", field: "Design"),
-                Mentor(name: "MK", field: "Education")
+                Mentor(name: "MK", field: "Learning Development"),
+                Mentor(name: "Gommin", field: "Domain"),
+                Mentor(name: "Nathan", field: "Tech"),
+                Mentor(name: "Daisy", field: "Design"),
+                Mentor(name: "Dora", field: "Design"),
+                Mentor(name: "Lumi", field: "Tech"),
+                Mentor(name: "Lingo", field: "Tech"),
+                Mentor(name: "Saya", field: "Design"),
+                Mentor(name: "Sub", field: "Design"),
+                Mentor(name: "Issac", field: "Tech"),
+                Mentor(name: "Jason", field: "Tech"),
+                Mentor(name: "Judy", field: "Tech"),
+                Mentor(name: "Jiku", field: "Design"),
+                Mentor(name: "Howard", field: "Tech")
+                
             ]
             
             let learners = [

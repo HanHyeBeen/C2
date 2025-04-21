@@ -13,6 +13,7 @@ struct DetailView: View {
     let learner: Learner?
     let questions: [AssignedQuestion]
     let itemTitle: String
+    let itemSub: String
 
     @Environment(\.modelContext) private var modelContext
     @State private var editingMemoID: UUID?
@@ -131,7 +132,7 @@ struct DetailView: View {
                 }
                 .padding()
             }
-            .navigationTitle(itemTitle)
+            .navigationTitle(itemTitle + "(" + itemSub + ")")
         }
     }
 }

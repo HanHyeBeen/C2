@@ -29,104 +29,110 @@ struct DetailView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-
-                    // 제목 텍스트
-                    if let mentor = mentor {
-                        Text("멘토 \(mentor.name)가 받은 질문 목록:")
-                            .font(.headline)
-                    } else if let learner = learner {
-                        Text("러너 \(learner.name)가 받은 질문 목록:")
-                            .font(.headline)
-                    } else {
-                        Text("질문 목록:")
-                            .font(.headline)
-                    }
-
-                    // 질문 목록
                     ForEach(questions, id: \.id) { aq in
-                        VStack(alignment: .leading, spacing: 5) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            
+                            // 질문 말풍선 (왼쪽 정렬)
                             HStack {
                                 Text("\(aq.question.content)")
-                                    .font(.body)
-
+                                    .font(.custom("SUIT-ExtraBold", size: 16))
+                                    .padding(25)
+                                    .background(
+                                        Rectangle()
+                                            .fill(C2App.MainColor))
+                                            .cornerRadius(20)
+                                
                                 Spacer()
-
-                                // 메모가 있는 경우: 수정/삭제
-                                if aq.memo != nil {
+                            }
+                            
+                            // 메모 or + 버튼 (줄바꿈 후 오른쪽 정렬)
+                            HStack {
+                                Spacer()
+                                
+                                if aq.memo == nil && editingMemoID != aq.id {
                                     Button {
                                         editingMemoID = aq.id
-                                        memoText = aq.memo ?? ""
-                                    } label: {
-                                        Image(systemName: "pencil")
-                                            .foregroundColor(.orange)
-                                    }
-
-                                    Button {
-                                        showingDeleteAlertID = aq.id
-                                    } label: {
-                                        Image(systemName: "trash")
-                                            .foregroundColor(.red)
-                                    }
-                                    .alert("메모를 삭제하시겠습니까?", isPresented: Binding(
-                                        get: { showingDeleteAlertID == aq.id },
-                                        set: { if !$0 { showingDeleteAlertID = nil } }
-                                    )) {
-                                        Button("삭제", role: .destructive) {
-                                            aq.memo = nil
-                                            aq.dateMemoAdded = nil
-                                            try? modelContext.save()
-                                            showingDeleteAlertID = nil
-                                        }
-                                        Button("취소", role: .cancel) {
-                                            showingDeleteAlertID = nil
-                                        }
-                                    }
-
-                                } else {
-                                    // 메모가 없는 경우: 추가 버튼
-                                    Button {
-                                        if editingMemoID == aq.id {
-                                            editingMemoID = nil
-                                        } else {
-                                            editingMemoID = aq.id
-                                            memoText = ""
-                                        }
+                                        memoText = ""
                                     } label: {
                                         Image(systemName: "plus.circle")
+                                            .font(.title2)
                                             .foregroundColor(.blue)
+                                            .padding(.trailing, 8)
                                     }
-                                }
-                            }
-
-                            // 메모 입력창
-                            if editingMemoID == aq.id {
-                                VStack(alignment: .leading) {
-                                    TextField("메모를 입력하세요", text: $memoText)
-                                        .textFieldStyle(.roundedBorder)
-
-                                    Button("저장") {
-                                        aq.memo = memoText
-                                        aq.dateMemoAdded = Date()
-                                        try? modelContext.save()
-                                        editingMemoID = nil
+                                } else if editingMemoID == aq.id {
+                                    VStack(alignment: .trailing, spacing: 6) {
+                                        TextField("메모를 입력하세요", text: $memoText)
+                                            .font(.custom("SUIT-ExtraBold", size: 16))
+                                        //                                            .textFieldStyle(.roundedBorder)
+                                        
+                                        Button("저장") {
+                                            aq.memo = memoText
+                                            aq.dateMemoAdded = Date()
+                                            try? modelContext.save()
+                                            editingMemoID = nil
+                                        }
+                                        .font(.custom("SUIT-ExtraBold", size: 16))
                                     }
-                                    .font(.caption)
-                                    .padding(.top, 4)
-                                }
-                            }
+                                    .frame(maxWidth: 250)
+                                    .padding()
+                                    .background(
+                                        Rectangle()
+                                            .fill(C2App.MainColor).opacity(0.3))
+                                            .cornerRadius(20)
+                                } else if let memo = aq.memo, let date = aq.dateMemoAdded {
+                                    VStack(alignment: .leading, spacing: 6) {
+                                        HStack {
+                                            Text(date.formatted(.dateTime.year().month().day()))
+                                                .font(.custom("SUIT-Bold", size: 16))
+                                                .foregroundColor(C2App.TextSecondary)
+                                            Spacer()
+                                            Button {
+                                                editingMemoID = aq.id
+                                                memoText = memo
+                                            } label: {
+                                                Image(systemName: "pencil")
+                                                    .foregroundColor(.orange)
+                                            }
+                                            
+                                            Button {
+                                                showingDeleteAlertID = aq.id
+                                            } label: {
+                                                Image(systemName: "trash")
+                                                    .foregroundColor(.red)
+                                            }
+                                            .alert("메모를 삭제하시겠습니까?", isPresented: Binding(
+                                                get: { showingDeleteAlertID == aq.id },
+                                                set: { if !$0 { showingDeleteAlertID = nil } }
+                                            )) {
+                                                Button("삭제", role: .destructive) {
+                                                    aq.memo = nil
+                                                    aq.dateMemoAdded = nil
+                                                    try? modelContext.save()
+                                                    showingDeleteAlertID = nil
+                                                }
+                                                Button("취소", role: .cancel) {
+                                                    showingDeleteAlertID = nil
+                                                }
+                                            }
+                                        }
 
-                            // 저장된 메모 보여주기
-                            if let memo = aq.memo {
-                                Text("📝 메모: \(memo)")
-                                    .font(.footnote)
-                                    .foregroundColor(.gray)
+                                        Text(memo)
+                                            .font(.custom("SUIT-ExtraBold", size: 16))
+                                            .foregroundColor(.black)
+                                    }
+                                    .padding()
+                                    .background(
+                                        Rectangle()
+                                            .fill(C2App.MainColor).opacity(0.3))
+                                            .cornerRadius(20)
+                                    .frame(maxWidth: 250)
+                                }
                             }
                         }
-                        .padding()
-                        .background(Color.white.opacity(0.9))
-                        .cornerRadius(8)
-                        .shadow(radius: 1)
+                        .padding(.bottom, 20)
                     }
+
+
 
                     Spacer()
                 }

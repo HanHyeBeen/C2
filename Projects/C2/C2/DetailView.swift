@@ -36,12 +36,15 @@ struct DetailView: View {
                             HStack {
                                 Text("\(aq.question.content)")
                                     .font(.custom("SUIT-ExtraBold", size: 16))
-                                    .padding(25)
+                                    .padding(16)
                                     .background(
-                                        Rectangle()
-                                            .fill(C2App.MainColor))
-                                            .cornerRadius(20)
-                                
+                                        Image("memo_Q")
+                                            .resizable()
+                                        
+//                                        Rectangle()
+//                                            .fill(C2App.MainColor))
+//                                            .cornerRadius(20)
+                                    )
                                 Spacer()
                             }
                             
@@ -122,9 +125,12 @@ struct DetailView: View {
                                     }
                                     .padding()
                                     .background(
-                                        Rectangle()
-                                            .fill(C2App.MainColor).opacity(0.3))
-                                            .cornerRadius(20)
+                                        Image("memo_A")
+                                            .resizable()
+//                                        Rectangle()
+//                                            .fill(C2App.MainColor).opacity(0.3))
+//                                            .cornerRadius(20)
+                                        )
                                     .frame(maxWidth: 250)
                                 }
                             }

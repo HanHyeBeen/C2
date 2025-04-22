@@ -37,7 +37,6 @@ struct MainView: View {
     @State private var popupQuestion: String = ""
     @State private var showingResultPopup: Bool = false
 
-    @State private var showingAlertPopup: Bool = false
     @State private var alertMessage: String = ""
 
     

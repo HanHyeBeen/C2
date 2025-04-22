@@ -172,7 +172,6 @@ struct MainView: View {
                         } else if role == "러너" {
                             alertMessage = "모든 멘토가 질문을 다 받았습니다."
                         }
-                        showingAlertPopup = true
                         return
                     }
                     
@@ -186,7 +185,6 @@ struct MainView: View {
                         // 조건에 맞는 러너가 없으면 리턴
                         guard let learner = availableLearners.randomElement() else {
                             alertMessage = "모든 러너가 질문을 다 받았습니다."
-                            showingAlertPopup = true
                             return
                         }
                         
@@ -229,7 +227,6 @@ struct MainView: View {
                         
                         guard let mentor = availableMentors.randomElement() else {
                             alertMessage = "모든 멘토가 질문을 다 받았습니다."
-                            showingAlertPopup = true
                             return
                         }
                         
@@ -279,7 +276,14 @@ struct MainView: View {
                 .font(.title2)
                 //                .disabled(!canDraw) // ✅ 비활성화 조건 적용
                 //                .opacity(canDraw ? 1 : 0.4) // 선택적: 시각적으로 흐리게 표시
-                
+                .alert("알림", isPresented: .constant(!alertMessage.isEmpty)) {
+                    Button("확인") {
+                        alertMessage = "" // alert 닫기
+                    }
+                } message: {
+                    Text(alertMessage)
+                }
+
                 Spacer()
                 
                 
@@ -365,55 +369,6 @@ struct MainView: View {
                 .transition(.scale)
                 .animation(.spring(), value: showingResultPopup)
                 
-            }
-            
-            if showingAlertPopup {
-                Color.black.opacity(0.3).ignoresSafeArea()
-                
-                VStack(spacing: 30) {
-                    Text("알림")
-                        .font(.title).bold()
-                    Text(alertMessage)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.black)
-                        .padding(.horizontal)
-                    
-                    Button(action: {
-                        showingResultPopup = false
-                    }) {
-                        ZStack {
-                            Image("RandomBtn")
-                                .resizable()
-                                .frame(width: 135, height: 44)
-                            
-                            Text("확 인")
-                                .font(
-                                    Font.custom("SUIT-ExtraBold", size: 20)
-                                )
-                                .multilineTextAlignment(.center)
-                                .foregroundColor(C2App.Sub1)
-                        }
-                    }
-                    .font(Font.custom("SUIT-Bold", size: 20))
-                    .foregroundColor(.black)
-                    .padding(.horizontal, 30)
-                    .padding(.vertical, 10)
-                    .cornerRadius(12)
-                }
-                .padding()
-                .frame(width: 332, height: 669)
-                .background(
-                    Image("RandomCard")
-                        .resizable()
-                        .frame(width: 289, height: 66)
-                )
-//                .background(
-//                    RoundedRectangle(cornerRadius: 24)
-//                        .fill(Color.white)
-//                        .shadow(radius: 10)
-//                )
-                .padding(.horizontal, 30)
-                .padding(.vertical, 100)
             }
         }
     }

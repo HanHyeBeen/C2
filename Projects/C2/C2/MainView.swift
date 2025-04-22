@@ -57,13 +57,26 @@ struct MainView: View {
                             .clipped()
                     }
                     .padding(.horizontal, 20)
+                    
                     Spacer()
                     
                     // 보관함 이동
-                    NavigationLink("보관함") {
-                        ArchiveView(role: role)
+                    ZStack(alignment: .topTrailing) {
+                        NavigationLink(destination: ArchiveView(role: role)) {
+                            Image("ArchiveBtn")
+                                .resizable()
+                                .frame(width: 42, height: 40)
+                        }
+
+                        if shouldShowMemoAlert() {
+                            Image("NewIcon")
+                                .resizable()
+                                .frame(width: 10, height: 10)
+                                .offset(x: 0, y: 5)
+                        }
                     }
-                    .padding(20)
+                    .padding(.horizontal, 30)
+
                 }
                 
                 Spacer()
@@ -390,6 +403,17 @@ struct MainView: View {
             canDraw = !availableMentors.isEmpty
         }
     }
-
-
+    
+    private func shouldShowMemoAlert() -> Bool {
+        if role == "멘토" {
+            let thisMentor = mentors.first(where: { $0.name == userID })
+            let related = assignedQuestions.filter { $0.mentor?.id == thisMentor?.id }
+            return related.contains { $0.memo == nil }
+        } else if role == "러너" {
+            let thisLearner = learners.first(where: { $0.name == userID })
+            let related = assignedQuestions.filter { $0.learner?.id == thisLearner?.id }
+            return related.contains { $0.memo == nil }
+        }
+        return false
+    }
 }

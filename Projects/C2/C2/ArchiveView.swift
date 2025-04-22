@@ -68,41 +68,56 @@ struct ArchiveView: View {
     // 멘토 카드
     @ViewBuilder
     private func mentorCard(for mentor: Mentor) -> some View {
-        NavigationLink {
-            DetailView(mentor: mentor, learner: nil, questions: mentorDict[mentor] ?? [], itemTitle: mentor.name, itemSub: mentor.field)
-        } label: {
-            ZStack {
-                Group {
-                    if mentor.field == "Tech" {
-                        Image("Tech")
-                            .resizable()
-                    } else if mentor.field == "Design" {
-                        Image("Design")
-                            .resizable()
-                    } else if mentor.field == "Domain" {
-                        Image("Domain")
-                            .resizable()
-                    } else {
-                        Image("Etc")
-                            .resizable()
+        let questions = mentorDict[mentor] ?? []
+        let hasUnanswered = questions.contains { $0.memo == nil }
+        
+        ZStack(alignment: .topTrailing) {
+            NavigationLink {
+                DetailView(mentor: mentor, learner: nil, questions: mentorDict[mentor] ?? [], itemTitle: mentor.name, itemSub: mentor.field)
+            } label: {
+                ZStack {
+                    Group {
+                        if mentor.field == "Tech" {
+                            Image("Tech")
+                                .resizable()
+                        } else if mentor.field == "Design" {
+                            Image("Design")
+                                .resizable()
+                        } else if mentor.field == "Domain" {
+                            Image("Domain")
+                                .resizable()
+                        } else {
+                            Image("Etc")
+                                .resizable()
+                        }
                     }
+                    .frame(width: 100, height: 100)
+                    .cornerRadius(8)
+                    
+                    Text(mentor.name)
+                        .font(Font.custom("UhBee Se_hyun Bold", size: 14))
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(C2App.TextPrimary)
+                        .padding(.bottom, 20)
                 }
-                .frame(width: 100, height: 100)
-                .cornerRadius(8)
-
-                Text(mentor.name)
-                    .font(Font.custom("UhBee Se_hyun Bold", size: 14))
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(C2App.TextPrimary)
-                    .padding(.bottom, 20)
+            }
+            .buttonStyle(PlainButtonStyle())
+            
+            if hasUnanswered {
+                Image("NewIcon")
+                    .resizable()
+                    .frame(width: 21, height: 21)
+                    .offset(x: -3, y: 7)
             }
         }
-        .buttonStyle(PlainButtonStyle())
     }
     
     // 러너 카드
     @ViewBuilder
     private func learnerCard(for learner: Learner) -> some View {
+        let questions = learnerDict[learner] ?? []
+        let hasUnanswered = questions.contains { $0.memo == nil }
+        
         NavigationLink {
             DetailView(mentor: nil, learner: learner, questions: learnerDict[learner] ?? [], itemTitle: learner.name, itemSub: learner.field)
         } label: {
@@ -124,7 +139,7 @@ struct ArchiveView: View {
                 }
                 .frame(width: 100, height: 100)
                 .cornerRadius(8)
-
+                
                 Text(learner.name)
                     .font(Font.custom("UhBee Se_hyun Bold", size: 14))
                     .multilineTextAlignment(.center)
@@ -133,7 +148,12 @@ struct ArchiveView: View {
             }
         }
         .buttonStyle(PlainButtonStyle())
+        
+        if hasUnanswered {
+            Circle()
+                .fill(Color.red)
+                .frame(width: 12, height: 12)
+                .offset(x: 6, y: -6)
+        }
     }
-
-
 }

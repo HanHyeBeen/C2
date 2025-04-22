@@ -36,6 +36,7 @@ struct DetailView: View {
                             HStack {
                                 Text("\(aq.question.content)")
                                     .font(.custom("SUIT-ExtraBold", size: 16))
+                                    .foregroundColor(C2App.TextPrimary)
                                     .padding(16)
                                     .background(
                                         Image("memo_Q")
@@ -57,31 +58,70 @@ struct DetailView: View {
                                         editingMemoID = aq.id
                                         memoText = ""
                                     } label: {
-                                        Image(systemName: "plus.circle")
-                                            .font(.title2)
-                                            .foregroundColor(.blue)
+                                        Image("AddBtn")
+                                            .resizable()
+                                            .frame(width: 72, height: 60)
                                             .padding(.trailing, 8)
                                     }
                                 } else if editingMemoID == aq.id {
                                     VStack(alignment: .trailing, spacing: 6) {
-                                        TextField("메모를 입력하세요", text: $memoText)
-                                            .font(.custom("SUIT-ExtraBold", size: 16))
-                                        //                                            .textFieldStyle(.roundedBorder)
-                                        
-                                        Button("저장") {
-                                            aq.memo = memoText
-                                            aq.dateMemoAdded = Date()
-                                            try? modelContext.save()
-                                            editingMemoID = nil
+                                        HStack {
+                                            Text(Date().formatted(.dateTime.year().month().day()))
+                                                .font(.custom("SUIT-Bold", size: 16))
+                                                .foregroundColor(C2App.TextSecondary)
+                                            
+                                            Spacer()
+                                            
+                                            Button {
+                                                editingMemoID = nil
+                                                memoText = ""
+                                            } label: {
+                                                ZStack {
+                                                    Image("DeleteBtn")
+                                                        .resizable()
+                                                        .frame(width: 21, height: 21)
+                                                }
+                                            }
                                         }
-                                        .font(.custom("SUIT-ExtraBold", size: 16))
+                                        
+                                        TextField(
+                                            "",
+                                            text: $memoText,
+                                            prompt: Text("메모를 입력하세요")
+                                                .font(.custom("SUIT-ExtraBold", size: 16))
+                                                .foregroundColor(C2App.TextSub)
+                                            )
+                                            .font(.custom("SUIT-ExtraBold", size: 16))
+                                            .foregroundColor(C2App.TextPrimary)
+                                            .padding(.vertical, 8)
+                                        
+                                        HStack {
+                                            Spacer()
+                                            
+                                            Button {
+                                                aq.memo = memoText
+                                                aq.dateMemoAdded = Date()
+                                                try? modelContext.save()
+                                                editingMemoID = nil
+                                            } label: {
+                                                ZStack {
+                                                    Image("Detail_SaveBtn")
+                                                        .resizable()
+                                                        .frame(width: 60, height: 32)
+                                                    
+                                                    Text("저장")
+                                                        .font(.custom("SUIT-ExtraBold", size: 16))
+                                                        .foregroundColor(C2App.Sub1)
+                                                }
+                                            }
+                                        }
                                     }
                                     .frame(maxWidth: 250)
                                     .padding()
                                     .background(
-                                        Rectangle()
-                                            .fill(C2App.MainColor).opacity(0.3))
-                                            .cornerRadius(20)
+                                        Image("memo_A")
+                                            .resizable()
+                                    )
                                 } else if let memo = aq.memo, let date = aq.dateMemoAdded {
                                     VStack(alignment: .leading, spacing: 6) {
                                         HStack {
@@ -93,15 +133,18 @@ struct DetailView: View {
                                                 editingMemoID = aq.id
                                                 memoText = memo
                                             } label: {
-                                                Image(systemName: "pencil")
-                                                    .foregroundColor(.orange)
+                                                Image("EditBtn")
+                                                    .resizable()
+                                                    .frame(width: 21, height: 21)
                                             }
+                                            .padding(.trailing, 8)
                                             
                                             Button {
                                                 showingDeleteAlertID = aq.id
                                             } label: {
-                                                Image(systemName: "trash")
-                                                    .foregroundColor(.red)
+                                                Image("DeleteBtn")
+                                                    .resizable()
+                                                    .frame(width: 21, height: 21)
                                             }
                                             .alert("메모를 삭제하시겠습니까?", isPresented: Binding(
                                                 get: { showingDeleteAlertID == aq.id },
@@ -121,7 +164,8 @@ struct DetailView: View {
 
                                         Text(memo)
                                             .font(.custom("SUIT-ExtraBold", size: 16))
-                                            .foregroundColor(.black)
+                                            .foregroundColor(C2App.TextPrimary)
+                                            .padding(.top, 4)
                                     }
                                     .padding()
                                     .background(

@@ -98,7 +98,7 @@ struct LoginView: View {
                     isLoggedIn = true
                 }) {
                     ZStack {
-                        Image("Login_btn")
+                        Image(isLoginEnabled ? "Login_btn" : "Login_btn_disabled")
                             .resizable()
                             .frame(width: 259, height: 48)
                         

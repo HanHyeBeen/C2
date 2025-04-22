@@ -66,7 +66,7 @@ struct DetailView: View {
                                 } else if editingMemoID == aq.id {
                                     VStack(alignment: .trailing, spacing: 6) {
                                         HStack {
-                                            Text(Date().formatted(.dateTime.year().month().day()))
+                                            Text(formatDate(Date()))
                                                 .font(.custom("SUIT-Bold", size: 16))
                                                 .foregroundColor(C2App.TextSecondary)
                                             
@@ -125,7 +125,7 @@ struct DetailView: View {
                                 } else if let memo = aq.memo, let date = aq.dateMemoAdded {
                                     VStack(alignment: .leading, spacing: 6) {
                                         HStack {
-                                            Text(date.formatted(.dateTime.year().month().day()))
+                                            Text(formatDate(Date()))
                                                 .font(.custom("SUIT-Bold", size: 16))
                                                 .foregroundColor(C2App.TextSecondary)
                                             Spacer()
@@ -191,4 +191,11 @@ struct DetailView: View {
             .navigationTitle(itemTitle + "(" + itemSub + ")")
         }
     }
+    
+    func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yy.MM.dd"
+        return formatter.string(from: date)
+    }
+
 }

@@ -69,11 +69,17 @@ struct ContentView: View {
             
             let learners = [
                 Learner(name: "Jeje", field: "Domain"),
-                Learner(name: "Romak", field: "Domain"),
-                Learner(name: "Excellenty", field: "Domain"),
+                Learner(name: "Excellenty", field: "Design"),
                 Learner(name: "Sally", field: "Design"),
-                Learner(name: "My", field: "Tech"),
-                Learner(name: "Anne", field: "Tech")
+                Learner(name: "Anne", field: "Tech"),
+                Learner(name: "Luka", field: "Domain"),
+                Learner(name: "JeOng", field: "Tech"),
+                Learner(name: "Jerry", field: "Tech"),
+                Learner(name: "Kinder", field: "Domain"),
+                Learner(name: "Emma", field: "Tech"),
+                Learner(name: "Romak", field: "Domain"),
+                Learner(name: "Alex", field: "Domain"),
+                Learner(name: "My", field: "Tech")
             ]
             
             let questions = [

@@ -13,9 +13,10 @@ struct MainView: View {
     var userID: String
     var role: String  // "멘토" 또는 "러너"
 
+    //SwiftData의 Context를 환경 변수로 가져옴
     @Environment(\.modelContext) private var modelContext
 
-    // 전체 데이터 쿼리
+    // 전체 데이터 쿼리 (모든 객체 조회)
     @Query private var mentors: [Mentor]
     @Query private var learners: [Learner]
     @Query private var questions: [Question]
@@ -30,8 +31,10 @@ struct MainView: View {
     @Binding var currentMentor: Mentor?
     @Binding var currentLearner: Learner?
     
+    // 질문 뽑기가 가능한 상태인지 여부
     @State private var canDraw: Bool = true
 
+    // 팝업 표시 내용
     @State private var popupName: String = ""
     @State private var popupField: String = ""
     @State private var popupQuestion: String = ""
@@ -68,6 +71,7 @@ struct MainView: View {
                                 .frame(width: 42, height: 40)
                         }
 
+                        // 질문에 답변 추가 안한 메모가 있는 경우 알림 표시
                         if shouldShowMemoAlert() {
                             Image("NewIcon")
                                 .resizable()
@@ -81,6 +85,7 @@ struct MainView: View {
                 
                 Spacer()
                 
+                // User Name (Dev Mode _ reset DB) 안됨
                 Button(action: {
                     if role == "멘토", let mentor = currentMentor {
                         // mentor.id와 연결된 AssignedQuestion 모두 삭제
@@ -155,23 +160,23 @@ struct MainView: View {
                 //                    .foregroundColor(.gray)
                 
                 // 역할별 이름, 분야 표시
-                if role == "러너", let mentor = selectedMentor {
-                    //                    Text("🎯 \(mentor.name)").font(.title2)
-                    //                    Text("📘 \(mentor.field)").font(.subheadline).foregroundColor(.gray)
-                }
-                
-                if role == "멘토", let learner = selectedLearner {
-                    //                    Text("🎯 \(learner.name)").font(.title2)
-                    //                    Text("📘 \(learner.field)").font(.subheadline).foregroundColor(.gray)
-                }
-                
-                // 선택된 질문 표시
-                if let question = selectedQuestion {
-                    //                    Text("❓ \(question.content)")
-                    //                        .font(.headline)
-                    //                        .foregroundColor(.black)
-                    //                        .padding(.top)
-                }
+//                if role == "러너", let mentor = selectedMentor {
+//                    //                    Text("🎯 \(mentor.name)").font(.title2)
+//                    //                    Text("📘 \(mentor.field)").font(.subheadline).foregroundColor(.gray)
+//                }
+//                
+//                if role == "멘토", let learner = selectedLearner {
+//                    //                    Text("🎯 \(learner.name)").font(.title2)
+//                    //                    Text("📘 \(learner.field)").font(.subheadline).foregroundColor(.gray)
+//                }
+//                
+//                // 선택된 질문 표시
+//                if let question = selectedQuestion {
+//                    //                    Text("❓ \(question.content)")
+//                    //                        .font(.headline)
+//                    //                        .foregroundColor(.black)
+//                    //                        .padding(.top)
+//                }
                 
                 
                 Spacer()
@@ -179,14 +184,15 @@ struct MainView: View {
                 
                 // 뽑기 버튼
                 Button(action: {
-                    if !canDraw {
-                        if role == "멘토" {
-                            alertMessage = "모든 러너가 질문을 다 받았습니다."
-                        } else if role == "러너" {
-                            alertMessage = "모든 멘토가 질문을 다 받았습니다."
-                        }
-                        return
-                    }
+                    // 뽑기 불가능시
+//                    if !canDraw {
+//                        if role == "멘토" {
+//                            alertMessage = "모든 러너가 질문을 다 받았습니다."
+//                        } else if role == "러너" {
+//                            alertMessage = "모든 멘토가 질문을 다 받았습니다."
+//                        }
+//                        return
+//                    }
                     
                     if role == "멘토" {
                         // 질문이 남아있는 러너들만 필터링
@@ -201,12 +207,19 @@ struct MainView: View {
                             return
                         }
                         
+                        // 현재 learner(러너)에게 할당된 질문들만 필터링하여 가져옴
                         let assignedToLearner = assignedQuestions.filter { $0.learner?.id == learner.id }
+                        
+                        // 해당 learner에게 이미 할당된 질문들의 ID만 뽑아서 Set(집합)으로 저장 (중복 제거 목적)
                         let assignedIds = Set(assignedToLearner.map { $0.question.id })
+                        
+                        // 전체 질문 목록 중, 아직 이 learner에게 할당되지 않은 질문만 필터링
                         let unassigned = questions.filter { !assignedIds.contains($0.id) }
                         
+                        // 할당되지 않은 질문 중 하나를 무작위로 선택
                         guard let question = unassigned.randomElement() else {
-                            currentLearner = learner
+                            // 만약 모든 질문이 할당된 경우, 현재 learner 정보만 저장하고, 선택된 질문은 비워둠
+                            currentLearner = nil
                             selectedQuestion = nil
                             return
                         }
@@ -249,7 +262,7 @@ struct MainView: View {
                         let unassigned = questions.filter { !assignedIds.contains($0.id) }
                         
                         guard let question = unassigned.randomElement() else {
-                            currentMentor = mentor
+                            currentMentor = nil
                             selectedQuestion = nil
                             return
                         }
@@ -315,6 +328,31 @@ struct MainView: View {
                 
                 VStack(spacing: 10) {
                     VStack {
+                        Group {
+                            if selectedMentor?.field == "Tech" || selectedLearner?.field == "Tech" {
+                                Image("Tech")
+                                    .resizable()
+                                    .frame(width: 80, height: 80)
+//                                    .offset(x: -80, y: 130)
+                            } else if selectedMentor?.field == "Design" || selectedLearner?.field == "Design" {
+                                Image("Design")
+                                    .resizable()
+                                    .frame(width: 80, height: 80)
+//                                    .offset(x: -80, y: 130)
+                            } else if selectedMentor?.field == "Domain" || selectedLearner?.field == "Domain" {
+                                Image("Domain")
+                                    .resizable()
+                                    .frame(width: 80, height: 80)
+//                                    .offset(x: -80, y: 130)
+                            } else {
+                                Image("Etc")
+                                    .resizable()
+                                    .frame(width: 80, height: 80)
+//                                    .offset(x: -80, y: 130)
+                            }
+                        }
+                        .padding(.bottom, 10)
+                        
                         Text(popupName)
                             .font(Font.custom("SUIT-ExtraBold", size: 24))
                         Text(popupField)
@@ -370,17 +408,11 @@ struct MainView: View {
                         .aspectRatio(contentMode: .fill)
 //                        .frame(width: 332, height: 669)
                 )
-                .padding(.top, 80)
-                .overlay(
-                    // ✅ 알 뽑기 이미지 (하단)
-                    Image("")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .offset(x: -80, y: 130),
-                    alignment: .bottom
-                )
+                .padding(.top, 40)
                 .transition(.scale)
                 .animation(.spring(), value: showingResultPopup)
+
+
                 
             }
         }
